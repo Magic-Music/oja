@@ -20,7 +20,10 @@ class UserRepositoryTest extends TestCase
         $userData = User::factory()->make()->toArray();
         $repository->storeUser($userData);
 
-        $this->assertDatabaseHas('users', $userData);
+        $this->assertDatabaseHas('users', [
+            'email' => $userData['email'],
+            'name' => $userData['name'],
+        ]);
     }
 
     public function testItRetrievesUserData()

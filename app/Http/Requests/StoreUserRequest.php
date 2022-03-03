@@ -14,7 +14,7 @@ class StoreUserRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -28,7 +28,7 @@ class StoreUserRequest extends FormRequest
             'email' => 'required|email',
             'password' => [
                 'required',
-                'alpha_num',
+                'min:8',
                 new PasswordRequirement,
             ],
         ];
