@@ -10,6 +10,7 @@ class UserRepository implements UserRepositoryInterface
 
     public function storeUser(array $userData): void
     {
+        $userData['password'] = password_hash($userData['password'], PASSWORD_DEFAULT);
         User::create($userData);
     }
 
