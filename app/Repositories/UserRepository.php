@@ -2,21 +2,24 @@
 
 namespace App\Repositories;
 
+use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
+
 class UserRepository implements UserRepositoryInterface
 {
 
     public function storeUser(array $userData): void
     {
-        // TODO: Implement storeUser() method.
+        User::create($userData);
     }
 
-    public function getUser(string $email): array
+    public function getUser(string $email): User
     {
-        // TODO: Implement getUser() method.
+        return User::where('email', $email)->first();
     }
 
-    public function getAllUsers(): array
+    public function getAllUsers(): Collection
     {
-        // TODO: Implement getAllUsers() method.
+        return User::all();
     }
 }
