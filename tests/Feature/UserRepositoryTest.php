@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Exceptions\EmailAlreadyExistsException;
 use App\Repositories\UserRepositoryInterface;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -24,6 +25,17 @@ class UserRepositoryTest extends TestCase
             'email' => $userData['email'],
             'name' => $userData['name'],
         ]);
+    }
+
+    public function testItFailsOnDuplicateEmail()
+    {
+        $repository = App::make(UserRepositoryInterface::class);
+        $userData = User::factory()->make()->toArray();
+        $repository->storeUser($userData);
+
+        $this->expectException(EmailAlreadyExistsException::class);
+        $repository->storeUser($userData);
+
     }
 
     public function testItRetrievesUserData()
