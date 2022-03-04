@@ -10,7 +10,14 @@ use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
-    public function store(StoreUserRequest $request, UserRepositoryInterface $userRepository)
+    private $userRepository;
+
+    public function __construct(UserRepositoryInterface $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
+    public function store(StoreUserRequest $request)
     {
         try {
             $userData = $request->safe()->only([
@@ -20,7 +27,7 @@ class UserController extends Controller
                 'postcode',
             ]);
 
-            $userRepository->storeUser($userData);
+            $this->userRepository->storeUser($userData);
 
             if ($request->wantsJson()) {
                 return response()->json(['message' => "User created: " . $userData['email']], Response::HTTP_CREATED);
@@ -38,9 +45,9 @@ class UserController extends Controller
         }
     }
 
-    public function show(Request $request, string $email, UserRepositoryInterface $userRepository)
+    public function show(Request $request, string $email)
     {
-        $userData = $userRepository->getUser($email);
+        $userData = $this->userRepository->getUser($email);
 
         if ($userData) {
             return response()->json($userData, 200);
@@ -49,9 +56,9 @@ class UserController extends Controller
         }
     }
 
-    public function all(Request $request, UserRepositoryInterface $userRepository)
+    public function all(Request $request)
     {
-        $userData = $userRepository->getAllUsers();
+        $userData = $this->userRepository->getAllUsers();
 
         if (count($userData) > 0 ) {
             return response()->json($userData, 200);
