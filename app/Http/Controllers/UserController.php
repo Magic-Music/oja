@@ -22,7 +22,11 @@ class UserController extends Controller
 
             $userRepository->storeUser($userData);
 
-            return response()->json(['message' => "User created: " . $userData['email']], Response::HTTP_CREATED);
+            if ($request->wantsJson()) {
+                return response()->json(['message' => "User created: " . $userData['email']], Response::HTTP_CREATED);
+            } else {
+                return redirect('created');
+            }
         } catch (\Exception $exception) {
             Log::error(sprintf(
                 "API error creating user \n%s\n%s",
