@@ -1,0 +1,15 @@
+body {
+    background-color: #eeeefe;
+}
+
+.card-header-background {
+    background-color: #6e868a;
+}
+
+.card-header-created-background {
+    background-color: #a8d099;
+}
+
+.card-background {
+    background-color: #dddded;
+}
