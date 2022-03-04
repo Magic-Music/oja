@@ -22,7 +22,7 @@ class UserController extends Controller
 
             $userRepository->storeUser($userData);
 
-            return response()->json(['message' => "User created: " . $userData['email']], 200);
+            return response()->json(['message' => "User created: " . $userData['email']], Response::HTTP_CREATED);
         } catch (\Exception $exception) {
             Log::error(sprintf(
                 "API error creating user \n%s\n%s",
@@ -34,13 +34,25 @@ class UserController extends Controller
         }
     }
 
-    public function show(Request $request, UserRepositoryInterface $userRepository)
+    public function show(Request $request, string $email, UserRepositoryInterface $userRepository)
     {
+        $userData = $userRepository->getUser($email);
 
+        if ($userData) {
+            return response()->json($userData, 200);
+        } else {
+            return response()->json(['message' => "User with email address $email could not be found"], Response::HTTP_NOT_FOUND);
+        }
     }
 
     public function all(Request $request, UserRepositoryInterface $userRepository)
     {
+        $userData = $userRepository->getAllUsers();
 
+        if (count($userData) > 0 ) {
+            return response()->json($userData, 200);
+        } else {
+            return response()->json(['message' => "No users were found"], Response::HTTP_NOT_FOUND);
+        }
     }
 }

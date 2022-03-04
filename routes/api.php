@@ -15,3 +15,5 @@ use App\Http\Controllers\UserController;
 */
 
 Route::post('user/create', [UserController::class, 'store']);
+Route::get('user/{email}', [UserController::class, 'show']);
+Route::get('users/all', [UserController::class, 'all']);
